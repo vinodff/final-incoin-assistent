@@ -3,8 +3,9 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Missing Supabase environment variables. Check your .env file.')
-}
+export const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey)
 
-export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '')
+// Only create the client when both vars are present — avoids a crash on blank env vars
+export const supabase = isSupabaseConfigured
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null
