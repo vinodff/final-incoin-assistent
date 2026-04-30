@@ -11,42 +11,7 @@ import {
   FileCode, QrCode, Home, CreditCard, Grid, User, ChevronRight, X
 } from 'lucide-react'
 
-const TOOLS = [
-  {
-    id: 'resume', name: 'Resume Builder', description: 'Create professional ATS-friendly resumes with AI assistance.',
-    credits: 10, icon: FileText, color: '#6366f1', category: 'Professional',
-  },
-  {
-    id: 'text-gen', name: 'AI Text Generator', description: 'Generate high-quality content, emails, and copy with AI.',
-    credits: 5, icon: Brain, color: '#8b5cf6', category: 'AI Tools',
-  },
-  {
-    id: 'image', name: 'Image Tools', description: 'Resize, compress, crop, and convert images instantly.',
-    credits: 8, icon: Image, color: '#3b82f6', category: 'Image',
-  },
-  {
-    id: 'youtube', name: 'YouTube Tools', description: 'Extract transcripts, metadata, and insights from videos.',
-    credits: 6, icon: Youtube, color: '#ef4444', category: 'YouTube',
-  },
-  {
-    id: 'converter', name: 'Converter Tools', description: 'Convert units, currencies, and file formats.',
-    credits: 3, icon: RefreshCw, color: '#10b981', category: 'Converter',
-  },
-  {
-    id: 'ai-writer', name: 'AI Writer', description: 'Long-form content writing powered by advanced AI models.',
-    credits: 15, icon: FileCode, color: '#f59e0b', category: 'AI Tools',
-  },
-  {
-    id: 'pdf', name: 'PDF Tools', description: 'Merge, split, compress, and convert PDF documents.',
-    credits: 4, icon: FileText, color: '#ec4899', category: 'Documents',
-  },
-  {
-    id: 'qr', name: 'QR Generator', description: 'Generate custom QR codes for URLs, contacts, and more.',
-    credits: 2, icon: QrCode, color: '#06b6d4', category: 'Utilities',
-  },
-]
-
-const CATEGORIES = ['All', ...new Set(TOOLS.map(t => t.category))]
+import { TOOLS, CATEGORIES } from '../lib/tools'
 
 export default function Dashboard() {
   const { user, profile, signOut, refreshProfile } = useAuth()
@@ -55,7 +20,6 @@ export default function Dashboard() {
   const [activeCategory, setActiveCategory] = useState('All')
   const [loadingPlan, setLoadingPlan] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [toolModal, setToolModal] = useState(null)
 
   const credits = profile?.credits ?? 0
   const filteredTools = activeCategory === 'All' ? TOOLS : TOOLS.filter(t => t.category === activeCategory)
@@ -85,7 +49,13 @@ export default function Dashboard() {
   }
 
   function handleUseTool(tool) {
-    setToolModal(tool)
+    if (tool.comingSoon) {
+      toast('🚧 This complex tool is coming soon in v2!', { icon: '🚧' })
+      return
+    }
+    // Note: Deduct credits logic can be added here before navigation if needed.
+    // For now, we just navigate to the fully functional tool.
+    navigate(`/tool/${tool.id}`)
   }
 
   const navItems = [
@@ -296,27 +266,6 @@ export default function Dashboard() {
           )}
         </div>
       </main>
-
-      {/* Tool Use Modal */}
-      {toolModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.8)' }} onClick={() => setToolModal(null)}>
-          <div className="max-w-md w-full rounded-2xl p-6" style={{ background: '#0d0d15', border: '1px solid rgba(99,102,241,0.3)' }} onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold text-white">{toolModal.name}</h3>
-              <button onClick={() => setToolModal(null)} className="text-slate-400 hover:text-white"><X size={20} /></button>
-            </div>
-            <p className="text-slate-400 mb-6">{toolModal.description}</p>
-            <div className="rounded-xl p-4 mb-6" style={{ background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)' }}>
-              <p className="text-sm text-slate-400">This tool costs <span className="text-indigo-300 font-semibold">{toolModal.credits} credits</span>.</p>
-              <p className="text-sm text-slate-400">Your balance: <span className="text-white font-semibold">{credits} credits</span></p>
-            </div>
-            <p className="text-slate-500 text-sm text-center">
-              🚧 Full tool interface coming soon. This is a demo.
-            </p>
-            <button onClick={() => setToolModal(null)} className="w-full mt-4 btn-outline">Close</button>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import Landing from './pages/Landing'
 import Pricing from './pages/Pricing'
 import Dashboard from './pages/Dashboard'
+import ToolRunner from './pages/ToolRunner'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 
@@ -39,6 +40,7 @@ export default function App() {
           <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
           <Route path="/signup" element={<GuestRoute><Signup /></GuestRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          <Route path="/tool/:id" element={<ProtectedRoute><ToolRunner /></ProtectedRoute>} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>

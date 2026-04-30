@@ -1,22 +1,15 @@
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import PricingCard from '../components/PricingCard'
 import { useAuth } from '../context/AuthContext'
 import { PLANS } from '../lib/plans'
+import { TOOLS, CATEGORIES } from '../lib/tools'
 import {
   ArrowRight, Zap, FileText, Image, Youtube, RefreshCw, Brain,
   Users, Star, Shield, Cpu, TrendingUp
 } from 'lucide-react'
-
-const features = [
-  { icon: Brain, title: 'AI-Powered Tools', desc: 'Cutting-edge AI models to assist your work', color: '#6366f1' },
-  { icon: FileText, title: 'Resume Builder', desc: 'Create professional resumes in minutes', color: '#8b5cf6' },
-  { icon: Image, title: 'Image Tools', desc: 'Edit, resize, and convert images instantly', color: '#3b82f6' },
-  { icon: Youtube, title: 'YouTube Tools', desc: 'Download, transcript, and analyze videos', color: '#ef4444' },
-  { icon: RefreshCw, title: 'Converters', desc: 'Convert files, units, and formats easily', color: '#10b981' },
-  { icon: Shield, title: 'Secure Platform', desc: 'Your data is encrypted and always safe', color: '#f59e0b' },
-]
 
 const stats = [
   { value: '50+', label: 'Tools Available' },
@@ -27,6 +20,10 @@ const stats = [
 
 export default function Landing() {
   const { user } = useAuth()
+  const [activeCategory, setActiveCategory] = useState('All')
+
+  // Filter tools: exclude 'comingSoon' tools from landing page preview
+  const displayTools = TOOLS.filter(t => !t.comingSoon && (activeCategory === 'All' || t.category === activeCategory))
 
   return (
     <div style={{ background: '#050507', minHeight: '100vh' }}>
@@ -91,32 +88,60 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Features */}
-      <section className="py-24 relative">
+      {/* Features - Interactive Tool Library */}
+      <section className="py-24 relative" id="features">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <h2 className="section-title text-white">
-              Everything You <span className="gradient-text">Need</span>
+              <span className="gradient-text">20+ Productivity</span> Tools
             </h2>
-            <p className="section-sub">Powerful tools designed to boost your productivity</p>
+            <p className="section-sub">Everything you need to work faster and smarter, beautifully organized.</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((f, i) => {
-              const Icon = f.icon
+          {/* Category Filter */}
+          <div className="flex flex-wrap justify-center gap-2 mb-12">
+            {CATEGORIES.filter(c => c !== 'Professional' && c !== 'AI Tools').map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+                  activeCategory === cat
+                    ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/25'
+                    : 'bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20'
+                }`}
+                style={{ border: activeCategory === cat ? '1px solid #8b5cf6' : '1px solid rgba(99,102,241,0.2)' }}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          {/* Tools Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {displayTools.slice(0, 24).map((tool) => {
+              const Icon = tool.icon
               return (
-                <div key={i} className="card group">
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110"
-                    style={{ background: `${f.color}22`, border: `1px solid ${f.color}44` }}
-                  >
-                    <Icon size={22} style={{ color: f.color }} />
+                <div key={tool.id} className="card group p-5 hover:-translate-y-1 transition-all duration-300">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div
+                      className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                      style={{ background: `${tool.color}22`, border: `1px solid ${tool.color}44` }}
+                    >
+                      <Icon size={18} style={{ color: tool.color }} />
+                    </div>
+                    <h3 className="text-md font-semibold text-white">{tool.name}</h3>
                   </div>
-                  <h3 className="text-lg font-semibold text-white mb-2">{f.title}</h3>
-                  <p className="text-slate-400 text-sm">{f.desc}</p>
+                  <p className="text-slate-400 text-sm line-clamp-2">{tool.desc}</p>
                 </div>
               )
             })}
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-slate-400 mb-6">And many more tools arriving soon...</p>
+            <Link to="/dashboard" className="btn-outline text-indigo-400 px-8 py-3">
+              Explore All Tools
+            </Link>
           </div>
         </div>
       </section>
