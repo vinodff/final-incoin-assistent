@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { initiatePayment } from '../lib/razorpay'
+import { initiatePayment } from '../lib/cashfree'
 import { PLANS } from '../lib/plans'
 import ToolCard from '../components/ToolCard'
 import PricingCard from '../components/PricingCard'

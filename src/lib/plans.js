@@ -13,7 +13,7 @@ export const PLANS = [
       'Email support',
       'Credits never expire',
     ],
-    razorpayAmount: 10000, // in paise (₹100 × 100)
+    amount: 10000, // in paise (₹100 × 100)
   },
   {
     id: 'popular',
@@ -29,7 +29,7 @@ export const PLANS = [
       'Priority support',
       'Credits never expire',
     ],
-    razorpayAmount: 20000, // in paise (₹200 × 100)
+    amount: 20000, // in paise (₹200 × 100)
   },
   {
     id: 'value',
@@ -45,6 +45,6 @@ export const PLANS = [
       'Priority support',
       'Credits never expire',
     ],
-    razorpayAmount: 50000, // in paise (₹500 × 100)
+    amount: 50000, // in paise (₹500 × 100)
   },
 ]

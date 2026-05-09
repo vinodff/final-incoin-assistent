@@ -5,7 +5,7 @@ import { Zap, Mail, Lock, User, Eye, EyeOff, Check } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 export default function Signup() {
-  const { signUp } = useAuth()
+  const { signUp, isSupabaseConfigured } = useAuth()
   const navigate = useNavigate()
   const [form, setForm] = useState({ fullName: '', email: '', password: '', confirmPassword: '' })
   const [showPass, setShowPass] = useState(false)
@@ -52,6 +52,15 @@ export default function Signup() {
       <div className="glow-blob w-80 h-80 -bottom-20 -left-20" style={{ background: '#8b5cf6', animationDelay: '3s' }} />
 
       <div className="w-full max-w-md relative z-10">
+        {/* Supabase not configured banner */}
+        {!isSupabaseConfigured && (
+          <div className="mb-4 rounded-xl px-4 py-3 text-sm border" style={{ background: 'rgba(239,68,68,0.1)', borderColor: 'rgba(239,68,68,0.3)', color: '#fca5a5' }}>
+            <strong>Setup required:</strong> Create a <code className="bg-black/20 px-1 rounded">.env</code> file with your Supabase credentials.<br />
+            Copy <code className="bg-black/20 px-1 rounded">.env.example</code> and fill in <code className="bg-black/20 px-1 rounded">VITE_SUPABASE_URL</code> and <code className="bg-black/20 px-1 rounded">VITE_SUPABASE_ANON_KEY</code> from your{' '}
+            <a href="https://supabase.com/dashboard/project/_/settings/api" target="_blank" rel="noreferrer" className="underline">Supabase project API settings</a>.
+          </div>
+        )}
+
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 justify-center mb-8">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6)' }}>

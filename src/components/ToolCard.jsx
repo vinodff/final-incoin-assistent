@@ -21,7 +21,7 @@ export default function ToolCard({ tool, userCredits, onUse }) {
       </div>
 
       <h3 className="font-semibold text-white mb-1">{tool.name}</h3>
-      <p className="text-slate-400 text-sm mb-4 leading-relaxed">{tool.description}</p>
+      <p className="text-slate-400 text-sm mb-4 leading-relaxed">{tool.desc}</p>
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">

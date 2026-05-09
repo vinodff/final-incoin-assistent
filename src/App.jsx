@@ -6,6 +6,12 @@ import Dashboard from './pages/Dashboard'
 import ToolRunner from './pages/ToolRunner'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import About from './pages/About'
+import Privacy from './pages/Privacy'
+import Terms from './pages/Terms'
+import Refund from './pages/Refund'
+import Contact from './pages/Contact'
+import FAQ from './pages/FAQ'
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
@@ -41,6 +47,12 @@ export default function App() {
           <Route path="/signup" element={<GuestRoute><Signup /></GuestRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/tool/:id" element={<ProtectedRoute><ToolRunner /></ProtectedRoute>} />
+          <Route path="/about" element={<About />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/refund" element={<Refund />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/faq" element={<FAQ />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>

@@ -121,7 +121,7 @@ export default function Landing() {
             {displayTools.slice(0, 24).map((tool) => {
               const Icon = tool.icon
               return (
-                <div key={tool.id} className="card group p-5 hover:-translate-y-1 transition-all duration-300">
+                <Link to={`/tool/${tool.id}`} key={tool.id} className="card group p-5 hover:-translate-y-1 transition-all duration-300 block">
                   <div className="flex items-center gap-3 mb-3">
                     <div
                       className="w-10 h-10 rounded-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
@@ -132,7 +132,7 @@ export default function Landing() {
                     <h3 className="text-md font-semibold text-white">{tool.name}</h3>
                   </div>
                   <p className="text-slate-400 text-sm line-clamp-2">{tool.desc}</p>
-                </div>
+                </Link>
               )
             })}
           </div>

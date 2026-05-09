@@ -21,7 +21,7 @@ export async function initiatePayment({ plan, user, onSuccess, onError }) {
     return
   }
 
-  const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID
+  const keyId = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SjayvBVvTJ88zL'
   if (!keyId) {
     onError('Payment gateway not configured. Contact support.')
     return

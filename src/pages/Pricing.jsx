@@ -5,15 +5,15 @@ import Footer from '../components/Footer'
 import PricingCard from '../components/PricingCard'
 import { useAuth } from '../context/AuthContext'
 import { PLANS } from '../lib/plans'
-import { initiatePayment } from '../lib/razorpay'
+import { initiatePayment } from '../lib/cashfree'
 import { Check, Zap } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const faqs = [
   { q: 'Do credits expire?', a: 'No! Credits never expire. Buy once, use whenever you want.' },
   { q: 'Can I buy multiple plans?', a: 'Yes, credits are cumulative. Buy multiple plans and they stack up.' },
-  { q: 'What payment methods are accepted?', a: 'We accept UPI, debit/credit cards, net banking, and wallets via Razorpay.' },
-  { q: 'Is my payment data secure?', a: 'All payments are processed by Razorpay — India\'s most trusted payment gateway. We never store card details.' },
+  { q: 'What payment methods are accepted?', a: 'We accept UPI, debit/credit cards, net banking, and wallets via Cashfree Payments.' },
+  { q: 'Is my payment data secure?', a: 'All payments are processed by Cashfree — a PCI-DSS Level 1 certified payment gateway. We never store card details.' },
 ]
 
 export default function Pricing() {

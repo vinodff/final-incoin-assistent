@@ -3,9 +3,11 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-export const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey)
+// A valid anon key is a JWT — it always starts with "eyJ"
+const isValidKey = supabaseAnonKey && supabaseAnonKey.startsWith('eyJ')
 
-// Only create the client when both vars are present — avoids a crash on blank env vars
+export const isSupabaseConfigured = !!(supabaseUrl && isValidKey)
+
 export const supabase = isSupabaseConfigured
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null
