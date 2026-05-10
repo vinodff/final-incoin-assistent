@@ -15,12 +15,14 @@ function loadCashfreeSDK() {
 }
 
 async function createOrder({ plan, user }) {
+  const isProd = window.location.hostname === 'incoinassistant.tech'
   const { data, error } = await supabase.functions.invoke('create-cashfree-order', {
     body: {
       planId: plan.id,
-      userId: user.id,
+      planName: plan.name,
+      totalCredits: plan.credits + plan.bonus,
       amount: plan.price,
-      userEmail: user.email,
+      mode: isProd ? 'production' : 'sandbox',
     },
   })
 
@@ -48,7 +50,8 @@ export async function initiatePayment({ plan, user, onSuccess, onError }) {
   }
 
   const totalCredits = plan.credits + plan.bonus
-  const cashfree = window.Cashfree({ mode: 'production' })
+  const isProd = window.location.hostname === 'incoinassistant.tech'
+  const cashfree = window.Cashfree({ mode: isProd ? 'production' : 'sandbox' })
 
   cashfree.checkout({
     paymentSessionId,
