@@ -2,10 +2,7 @@ import { supabase } from './supabase'
 
 function loadCashfreeSDK() {
   return new Promise((resolve) => {
-    if (window.Cashfree) {
-      resolve(true)
-      return
-    }
+    if (window.Cashfree) { resolve(true); return }
     const script = document.createElement('script')
     script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js'
     script.onload = () => resolve(true)
@@ -14,8 +11,9 @@ function loadCashfreeSDK() {
   })
 }
 
-async function createOrder({ plan, user }) {
+async function createOrder({ plan }) {
   const isProd = window.location.hostname === 'incoinassistant.tech'
+
   const { data, error } = await supabase.functions.invoke('create-cashfree-order', {
     body: {
       planId: plan.id,
@@ -26,8 +24,19 @@ async function createOrder({ plan, user }) {
     },
   })
 
-  if (error) throw new Error(error.message || 'Failed to create payment order')
-  if (data.error) throw new Error(data.error)
+  // When edge function returns non-2xx, supabase-js sets error and data may be null.
+  // Try to pull the actual message out of the error context first.
+  if (error) {
+    let msg = error.message || 'Failed to create payment order'
+    try {
+      const body = await error.context?.json?.()
+      if (body?.error) msg = body.error
+    } catch { /* ignore parse failure */ }
+    throw new Error(msg)
+  }
+
+  if (data?.error) throw new Error(data.error)
+  if (!data?.payment_session_id) throw new Error('No payment session returned from server')
 
   return { paymentSessionId: data.payment_session_id, orderId: data.order_id }
 }
@@ -41,7 +50,7 @@ export async function initiatePayment({ plan, user, onSuccess, onError }) {
 
   let paymentSessionId, orderId
   try {
-    const result = await createOrder({ plan, user })
+    const result = await createOrder({ plan })
     paymentSessionId = result.paymentSessionId
     orderId = result.orderId
   } catch (err) {
@@ -84,7 +93,7 @@ export async function initiatePayment({ plan, user, onSuccess, onError }) {
         })
 
         onSuccess({ totalCredits, paymentId: cfPaymentId })
-      } catch (err) {
+      } catch {
         onError('Payment succeeded but credit update failed. Contact support with order ID: ' + orderId)
       }
     },
