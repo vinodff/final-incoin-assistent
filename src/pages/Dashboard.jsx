@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { supabase } from '../lib/supabase'
 import { initiatePayment } from '../lib/cashfree'
 import { PLANS } from '../lib/plans'
 import ToolCard from '../components/ToolCard'
@@ -23,6 +24,40 @@ export default function Dashboard() {
 
   const credits = profile?.credits ?? 0
   const filteredTools = activeCategory === 'All' ? TOOLS : TOOLS.filter(t => t.category === activeCategory)
+
+  // Handle Cashfree redirect return (net banking / 3DS redirects bypass onSuccess callback)
+  useEffect(() => {
+    const hash = window.location.hash // e.g. #/dashboard?payment=success&order_id=IA_xxx&plan=starter
+    const qIndex = hash.indexOf('?')
+    if (qIndex === -1) return
+    const params = new URLSearchParams(hash.slice(qIndex + 1))
+    if (params.get('payment') !== 'success') return
+
+    const orderId = params.get('order_id')
+    const planId = params.get('plan') || params.get('plan_id')
+    if (!orderId) return
+
+    // Clear the query params from URL
+    window.history.replaceState(null, '', window.location.pathname + '#/dashboard')
+
+    const plan = PLANS.find(p => orderId.includes(p.id) || p.id === planId)
+    if (!plan) return
+
+    const creditsToAdd = plan.credits + plan.bonus
+
+    supabase.functions.invoke('verify-payment', {
+      body: { order_id: orderId, plan_id: plan.id, credits_to_add: creditsToAdd },
+    }).then(async ({ data, error }) => {
+      if (error || data?.error) {
+        // Silently ignore — may have already been processed by onSuccess callback
+        return
+      }
+      if (data?.success) {
+        await refreshProfile()
+        toast.success(`🎉 ${creditsToAdd} credits added to your account!`)
+      }
+    })
+  }, [])
 
   async function handleSignOut() {
     await signOut()
@@ -50,11 +85,14 @@ export default function Dashboard() {
 
   function handleUseTool(tool) {
     if (tool.comingSoon) {
-      toast('🚧 This complex tool is coming soon in v2!', { icon: '🚧' })
+      toast('🚧 This tool is coming soon!', { icon: '🚧' })
       return
     }
-    // Note: Deduct credits logic can be added here before navigation if needed.
-    // For now, we just navigate to the fully functional tool.
+    if ((profile?.credits ?? 0) < tool.credits) {
+      toast.error(`Need ${tool.credits} credits to use ${tool.name}. Buy more credits!`)
+      setActiveTab('buy-credits')
+      return
+    }
     navigate(`/tool/${tool.id}`)
   }
 
