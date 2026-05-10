@@ -22,14 +22,12 @@ async function createOrder({ plan }) {
     },
   })
 
-  // When edge function returns non-2xx, supabase-js sets error and data may be null.
-  // Try to pull the actual message out of the error context first.
   if (error) {
     let msg = error.message || 'Failed to create payment order'
     try {
       const body = await error.context?.json?.()
       if (body?.error) msg = body.error
-    } catch { /* ignore parse failure */ }
+    } catch { /* ignore */ }
     throw new Error(msg)
   }
 
@@ -37,6 +35,30 @@ async function createOrder({ plan }) {
   if (!data?.payment_session_id) throw new Error('No payment session returned from server')
 
   return { paymentSessionId: data.payment_session_id, orderId: data.order_id }
+}
+
+// Add credits via the verify-payment edge function (uses service role — bypasses RLS)
+async function addCreditsViaEdgeFunction({ orderId, plan }) {
+  const totalCredits = plan.credits + plan.bonus
+  const { data, error } = await supabase.functions.invoke('verify-payment', {
+    body: {
+      order_id: orderId,
+      plan_id: plan.id,
+      credits_to_add: totalCredits,
+    },
+  })
+
+  if (error) {
+    let msg = error.message || 'Credit update failed'
+    try {
+      const body = await error.context?.json?.()
+      if (body?.error) msg = body.error
+    } catch { /* ignore */ }
+    throw new Error(msg)
+  }
+
+  if (data?.error) throw new Error(data.error)
+  return totalCredits
 }
 
 export async function initiatePayment({ plan, user, onSuccess, onError }) {
@@ -56,41 +78,17 @@ export async function initiatePayment({ plan, user, onSuccess, onError }) {
     return
   }
 
-  const totalCredits = plan.credits + plan.bonus
   const cashfree = window.Cashfree({ mode: 'production' })
 
   cashfree.checkout({
     paymentSessionId,
-    returnUrl: `${window.location.origin}/#/dashboard?payment=success&order_id=${orderId}`,
+    returnUrl: `${window.location.origin}/#/dashboard?payment=success&order_id=${orderId}&plan_id=${plan.id}&credits=${plan.credits + plan.bonus}`,
 
-    onSuccess: async (data) => {
-      const cfPaymentId = data?.transaction?.transactionId || orderId
+    onSuccess: async () => {
       try {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('credits')
-          .eq('id', user.id)
-          .single()
-
-        const currentCredits = profile?.credits ?? 0
-
-        await supabase
-          .from('profiles')
-          .update({ credits: currentCredits + totalCredits })
-          .eq('id', user.id)
-
-        await supabase.from('payments').insert({
-          user_id: user.id,
-          payment_id: cfPaymentId,
-          order_id: orderId,
-          amount: plan.price,
-          credits_added: totalCredits,
-          plan_id: plan.id,
-          status: 'success',
-        })
-
-        onSuccess({ totalCredits, paymentId: cfPaymentId })
-      } catch {
+        const totalCredits = await addCreditsViaEdgeFunction({ orderId, plan })
+        onSuccess({ totalCredits, paymentId: orderId })
+      } catch (err) {
         onError('Payment succeeded but credit update failed. Contact support with order ID: ' + orderId)
       }
     },

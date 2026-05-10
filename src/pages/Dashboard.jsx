@@ -40,13 +40,13 @@ export default function Dashboard() {
     // Clear the query params from URL
     window.history.replaceState(null, '', window.location.pathname + '#/dashboard')
 
-    const plan = PLANS.find(p => orderId.includes(p.id) || p.id === planId)
-    if (!plan) return
-
-    const creditsToAdd = plan.credits + plan.bonus
+    const creditsParam = parseInt(params.get('credits') || '0')
+    const plan = PLANS.find(p => p.id === planId) || PLANS.find(p => orderId.includes(p.id))
+    const creditsToAdd = creditsParam || (plan ? plan.credits + plan.bonus : 0)
+    if (!creditsToAdd) return
 
     supabase.functions.invoke('verify-payment', {
-      body: { order_id: orderId, plan_id: plan.id, credits_to_add: creditsToAdd },
+      body: { order_id: orderId, plan_id: planId || plan?.id || 'unknown', credits_to_add: creditsToAdd },
     }).then(async ({ data, error }) => {
       if (error || data?.error) {
         // Silently ignore — may have already been processed by onSuccess callback
