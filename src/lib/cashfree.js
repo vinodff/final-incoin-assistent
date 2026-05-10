@@ -14,24 +14,20 @@ function loadCashfreeSDK() {
   })
 }
 
-// Call your backend / Supabase Edge Function to create a Cashfree order
-// and return a payment_session_id.
 async function createOrder({ plan, user }) {
-  const appId = import.meta.env.VITE_CASHFREE_APP_ID
-  if (!appId) throw new Error('Cashfree App ID not configured.')
+  const { data, error } = await supabase.functions.invoke('create-cashfree-order', {
+    body: {
+      planId: plan.id,
+      userId: user.id,
+      amount: plan.price,
+      userEmail: user.email,
+    },
+  })
 
-  // Replace this with your actual Supabase Edge Function or backend endpoint:
-  // const { data, error } = await supabase.functions.invoke('create-cashfree-order', {
-  //   body: { planId: plan.id, userId: user.id, amount: plan.price },
-  // })
-  // if (error) throw new Error(error.message)
-  // return data.payment_session_id
+  if (error) throw new Error(error.message || 'Failed to create payment order')
+  if (data.error) throw new Error(data.error)
 
-  // ── Placeholder ──────────────────────────────────────────────────────────
-  // Remove the line below and uncomment the block above once you have a
-  // backend endpoint that calls the Cashfree Orders API and returns a
-  // payment_session_id.
-  throw new Error('Backend order-creation endpoint not yet configured. See src/lib/cashfree.js.')
+  return { paymentSessionId: data.payment_session_id, orderId: data.order_id }
 }
 
 export async function initiatePayment({ plan, user, onSuccess, onError }) {
@@ -41,25 +37,25 @@ export async function initiatePayment({ plan, user, onSuccess, onError }) {
     return
   }
 
-  let paymentSessionId
+  let paymentSessionId, orderId
   try {
-    paymentSessionId = await createOrder({ plan, user })
+    const result = await createOrder({ plan, user })
+    paymentSessionId = result.paymentSessionId
+    orderId = result.orderId
   } catch (err) {
     onError(err.message)
     return
   }
 
   const totalCredits = plan.credits + plan.bonus
-  const mode = import.meta.env.PROD ? 'production' : 'sandbox'
+  const cashfree = window.Cashfree({ mode: 'production' })
 
-  // Initialise Cashfree v3 SDK
-  const cashfree = window.Cashfree({ mode })
-
-  const checkoutOptions = {
+  cashfree.checkout({
     paymentSessionId,
-    returnUrl: `${window.location.origin}/#/dashboard?payment=success&plan=${plan.id}`,
+    returnUrl: `${window.location.origin}/#/dashboard?payment=success&order_id=${orderId}`,
+
     onSuccess: async (data) => {
-      const cfPaymentId = data?.transaction?.transactionId || data?.order?.orderId || 'unknown'
+      const cfPaymentId = data?.transaction?.transactionId || orderId
       try {
         const { data: profile } = await supabase
           .from('profiles')
@@ -77,6 +73,7 @@ export async function initiatePayment({ plan, user, onSuccess, onError }) {
         await supabase.from('payments').insert({
           user_id: user.id,
           payment_id: cfPaymentId,
+          order_id: orderId,
           amount: plan.price,
           credits_added: totalCredits,
           plan_id: plan.id,
@@ -85,15 +82,12 @@ export async function initiatePayment({ plan, user, onSuccess, onError }) {
 
         onSuccess({ totalCredits, paymentId: cfPaymentId })
       } catch (err) {
-        onError(
-          'Payment succeeded but credit update failed. Contact support with payment ID: ' + cfPaymentId
-        )
+        onError('Payment succeeded but credit update failed. Contact support with order ID: ' + orderId)
       }
     },
+
     onFailure: (data) => {
       onError('Payment failed: ' + (data?.transaction?.txMsg || 'Unknown error'))
     },
-  }
-
-  cashfree.checkout(checkoutOptions)
+  })
 }
