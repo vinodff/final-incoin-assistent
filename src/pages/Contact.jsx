@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { Mail, MessageSquare, Clock, Send, CheckCircle } from 'lucide-react'
+import { Mail, MessageSquare, Phone, Send, CheckCircle } from 'lucide-react'
 
 const topics = [
   'Payment / Billing Issue',
@@ -51,19 +51,19 @@ export default function Contact() {
               {
                 icon: Mail,
                 title: 'Email Support',
-                desc: 'support@incoinassistant.tech',
+                desc: 'vcontenthelper@gmail.com',
                 sub: 'For billing, refunds & account issues',
               },
               {
                 icon: MessageSquare,
                 title: 'General Enquiries',
-                desc: 'hello@incoinassistant.tech',
+                desc: 'vcontenthelper@gmail.com',
                 sub: 'For feedback and partnerships',
               },
               {
-                icon: Clock,
-                title: 'Response Time',
-                desc: 'Within 24 hours',
+                icon: Phone,
+                title: 'Phone Support',
+                desc: '8019238515',
                 sub: 'Monday – Saturday, 10am–7pm IST',
               },
             ].map(card => (

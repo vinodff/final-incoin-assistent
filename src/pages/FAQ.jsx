@@ -30,7 +30,7 @@ const faqs = [
       },
       {
         q: 'Can I get a refund if credits are not added after payment?',
-        a: 'Yes. If you were charged but credits were not added to your account, contact us at support@incoinassistant.tech with your payment ID and we will resolve it within 24 hours. See our full Refund Policy for details.',
+        a: 'Yes. If you were charged but credits were not added to your account, contact us at vcontenthelper@gmail.com with your payment ID and we will resolve it within 24 hours. See our full Refund Policy for details.',
       },
     ],
   },
@@ -68,7 +68,7 @@ const faqs = [
       },
       {
         q: 'How do I delete my account?',
-        a: 'You can request account deletion by emailing privacy@incoinassistant.tech. We will delete your personal data within 30 days. Unused credits are forfeited upon deletion.',
+        a: 'You can request account deletion by emailing vcontenthelper@gmail.com. We will delete your personal data within 30 days. Unused credits are forfeited upon deletion.',
       },
       {
         q: 'I forgot my password. What do I do?',

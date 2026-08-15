@@ -60,7 +60,7 @@ export default function Footer() {
           <div className="flex items-center gap-4">
             <a href="#" className="text-slate-500 hover:text-indigo-400 transition-colors"><Github size={18} /></a>
             <a href="#" className="text-slate-500 hover:text-indigo-400 transition-colors"><Twitter size={18} /></a>
-            <a href="mailto:support@incoinassistant.tech" className="text-slate-500 hover:text-indigo-400 transition-colors"><Mail size={18} /></a>
+            <a href="mailto:vcontenthelper@gmail.com" className="text-slate-500 hover:text-indigo-400 transition-colors"><Mail size={18} /></a>
           </div>
         </div>
       </div>

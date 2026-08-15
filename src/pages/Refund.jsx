@@ -87,7 +87,7 @@ export default function Refund() {
           </Section>
 
           <Section title="4. How to Request a Refund">
-            <p>To request a refund, email us at <strong className="text-slate-300">support@incoinassistant.tech</strong> with the subject line <em>"Refund Request"</em> and include:</p>
+            <p>To request a refund, email us at <strong className="text-slate-300">vcontenthelper@gmail.com</strong> with the subject line <em>"Refund Request"</em> and include:</p>
             <ul className="list-disc pl-5 space-y-1">
               <li>Your registered email address</li>
               <li>The Cashfree transaction/payment ID</li>
@@ -108,7 +108,7 @@ export default function Refund() {
           </Section>
 
           <Section title="6. Duplicate Charges">
-            <p>If you notice a duplicate charge, contact us immediately at <strong className="text-slate-300">support@incoinassistant.tech</strong>. We will investigate and issue a full refund for the duplicate charge, typically within 2 business days.</p>
+            <p>If you notice a duplicate charge, contact us immediately at <strong className="text-slate-300">vcontenthelper@gmail.com</strong>. We will investigate and issue a full refund for the duplicate charge, typically within 2 business days.</p>
           </Section>
 
           <Section title="7. Failed Transactions">
@@ -117,7 +117,11 @@ export default function Refund() {
 
           <Section title="8. Contact Us">
             <p>Questions about this policy? Reach out via:</p>
-            <p className="text-slate-300">Email: support@incoinassistant.tech</p>
+            <p className="text-slate-300">
+              Legal Name: Kondeti Vinodkumar<br />
+              Email: vcontenthelper@gmail.com<br />
+              Phone: 8019238515
+            </p>
             <p>Or use our <Link to="/contact" className="text-indigo-400 hover:underline">Contact page</Link>.</p>
           </Section>
 

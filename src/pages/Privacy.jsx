@@ -31,7 +31,7 @@ export default function Privacy() {
 
           <Section title="1. Introduction">
             <p>
-              Incoin Assistant ("we", "our", "us") operates the website <strong className="text-slate-300">incoinassistant.tech</strong>.
+              Kondeti Vinodkumar (operating as "Incoin Assistant", "we", "our", "us") operates the website <strong className="text-slate-300">incoinassistant.tech</strong>.
               This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our platform
               and use our productivity tools.
             </p>
@@ -85,7 +85,7 @@ export default function Privacy() {
               <li><strong className="text-slate-300">Deletion:</strong> Request deletion of your account and personal data</li>
               <li><strong className="text-slate-300">Portability:</strong> Receive your data in a machine-readable format</li>
             </ul>
-            <p>To exercise any of these rights, email us at <strong className="text-slate-300">privacy@incoinassistant.tech</strong>.</p>
+            <p>To exercise any of these rights, email us at <strong className="text-slate-300">vcontenthelper@gmail.com</strong>.</p>
           </Section>
 
           <Section title="9. Children's Privacy">
@@ -98,7 +98,12 @@ export default function Privacy() {
 
           <Section title="11. Contact">
             <p>If you have any questions about this Privacy Policy, please contact us at:</p>
-            <p className="text-slate-300">Email: privacy@incoinassistant.tech<br />Website: incoinassistant.tech</p>
+            <p className="text-slate-300">
+              Legal Name: Kondeti Vinodkumar<br />
+              Email: vcontenthelper@gmail.com<br />
+              Phone: 8019238515<br />
+              Website: incoinassistant.tech
+            </p>
           </Section>
 
         </div>

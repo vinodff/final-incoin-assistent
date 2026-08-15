@@ -98,7 +98,12 @@ export default function Terms() {
           </Section>
 
           <Section title="13. Contact">
-            <p>For any questions about these Terms, contact us at <strong className="text-slate-300">legal@incoinassistant.tech</strong>.</p>
+            <p>For any questions about these Terms, contact us at:</p>
+            <p className="text-slate-300">
+              Legal Name: Kondeti Vinodkumar<br />
+              Email: vcontenthelper@gmail.com<br />
+              Phone: 8019238515
+            </p>
           </Section>
 
         </div>
