@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
-import { Zap, Github, Twitter, Mail } from 'lucide-react'
+import { Zap, Github, Twitter, Mail, Phone, User } from 'lucide-react'
 
 export default function Footer() {
   return (
     <footer style={{ background: '#0d0d15', borderTop: '1px solid rgba(99,102,241,0.15)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8 mb-8">
           {/* Brand */}
           <div className="md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
@@ -53,10 +53,33 @@ export default function Footer() {
               <li><Link to="/refund" className="text-slate-400 hover:text-indigo-400 text-sm transition-colors">Refund Policy</Link></li>
             </ul>
           </div>
+
+          {/* Contact Info */}
+          <div>
+            <h4 className="font-semibold text-white mb-3">Contact Info</h4>
+            <ul className="space-y-2">
+              <li className="flex items-center gap-2 text-slate-400 text-sm">
+                <User size={14} className="text-indigo-400 flex-shrink-0" />
+                <span>Kondeti Vinodkumar</span>
+              </li>
+              <li>
+                <a href="mailto:vcontenthelper@gmail.com" className="flex items-center gap-2 text-slate-400 hover:text-indigo-400 text-sm transition-colors">
+                  <Mail size={14} className="text-indigo-400 flex-shrink-0" />
+                  <span>vcontenthelper@gmail.com</span>
+                </a>
+              </li>
+              <li>
+                <a href="tel:+918019238515" className="flex items-center gap-2 text-slate-400 hover:text-indigo-400 text-sm transition-colors">
+                  <Phone size={14} className="text-indigo-400 flex-shrink-0" />
+                  <span>+91 8019238515</span>
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
 
         <div className="border-t border-indigo-500/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-slate-500 text-sm">© 2026 Incoin Assistant. All rights reserved.</p>
+          <p className="text-slate-500 text-sm">© 2026 Incoin Assistant by Kondeti Vinodkumar. All rights reserved.</p>
           <div className="flex items-center gap-4">
             <a href="#" className="text-slate-500 hover:text-indigo-400 transition-colors"><Github size={18} /></a>
             <a href="#" className="text-slate-500 hover:text-indigo-400 transition-colors"><Twitter size={18} /></a>

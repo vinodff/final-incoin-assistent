@@ -120,10 +120,13 @@ export default function About() {
       <section className="py-16 px-4">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-6">Made with ♥ in India</h2>
-          <p className="text-slate-400 leading-relaxed mb-8">
-            We're a small, passionate team based in India. We built Incoin Assistant because we wanted it
+          <p className="text-slate-400 leading-relaxed mb-4">
+            Incoin Assistant is operated by <strong className="text-white">Kondeti Vinodkumar</strong>. We're a small, passionate team based in India. We built Incoin Assistant because we wanted it
             ourselves. Every feature, every tool, every design decision is made with the end-user in mind.
             We're constantly listening to feedback and shipping improvements.
+          </p>
+          <p className="text-slate-500 text-sm mb-8">
+            For queries, reach us at <a href="mailto:vcontenthelper@gmail.com" className="text-indigo-400 hover:underline">vcontenthelper@gmail.com</a> or call <a href="tel:+918019238515" className="text-indigo-400 hover:underline">+91 8019238515</a>.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link to="/pricing"
