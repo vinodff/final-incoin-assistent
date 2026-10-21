@@ -6,7 +6,7 @@ import PricingCard from '../components/PricingCard'
 import { useAuth } from '../context/AuthContext'
 import { PLANS } from '../lib/plans'
 import { initiatePayment } from '../lib/cashfree'
-import { Check, Zap } from 'lucide-react'
+import { Check, Zap, User, Mail, Phone, Shield } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const faqs = [
@@ -132,6 +132,64 @@ export default function Pricing() {
             ))}
           </div>
         </div>
+
+        {/* ── Merchant / Business Information (required by Cashfree KYC) ── */}
+        <div className="max-w-3xl mx-auto px-4 mt-20 mb-8">
+          <div
+            className="rounded-2xl p-7 border"
+            style={{
+              background: 'rgba(99,102,241,0.06)',
+              borderColor: 'rgba(99,102,241,0.25)',
+            }}
+          >
+            <div className="flex items-center gap-3 mb-5">
+              <div
+                className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
+                style={{ background: 'rgba(99,102,241,0.18)' }}
+              >
+                <Shield size={18} className="text-indigo-400" />
+              </div>
+              <div>
+                <h3 className="text-white font-semibold text-base">Business Information</h3>
+                <p className="text-slate-500 text-xs">Merchant details — as required by the payment gateway</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="flex items-start gap-3">
+                <User size={15} className="text-indigo-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <div className="text-slate-400 text-xs mb-0.5">Legal Name</div>
+                  <div className="text-white text-sm font-medium">Kondeti Vinodkumar</div>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Mail size={15} className="text-indigo-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <div className="text-slate-400 text-xs mb-0.5">Email</div>
+                  <a
+                    href="mailto:vcontenthelper@gmail.com"
+                    className="text-indigo-300 text-sm hover:text-indigo-200 transition-colors break-all"
+                  >
+                    vcontenthelper@gmail.com
+                  </a>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Phone size={15} className="text-indigo-400 mt-0.5 flex-shrink-0" />
+                <div>
+                  <div className="text-slate-400 text-xs mb-0.5">Phone</div>
+                  <a
+                    href="tel:+918019238515"
+                    className="text-indigo-300 text-sm hover:text-indigo-200 transition-colors"
+                  >
+                    +91 8019238515
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <Footer />
