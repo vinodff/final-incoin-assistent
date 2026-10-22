@@ -6,3 +6,4 @@ dist/
 *.log
 rzp-key.csv
 supabase/.temp/
+.gstack/
